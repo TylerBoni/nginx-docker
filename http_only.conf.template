@@ -1,0 +1,21 @@
+upstream app_upstream {
+  server app:3000;
+}
+
+
+server {
+  listen 80;
+  listen [::]:80;
+
+  server_name ${DOMAIN}.com;
+  server_tokens off;
+
+  location /.well-known/acme-challenge/ {
+    root /var/www/certbot;
+  }
+
+  location / {
+    proxy_pass http://app_upstream;
+  }
+}
+
